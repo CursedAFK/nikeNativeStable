@@ -1,15 +1,16 @@
 import { StatusBar } from 'expo-status-bar'
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import Products from '../components/Products'
 
 const Home = () => {
 	return (
-		<View style={styles.container}>
+		<SafeAreaView style={styles.container}>
 			<StatusBar style='auto' />
 
 			<Products />
-		</View>
+		</SafeAreaView>
 	)
 }
 

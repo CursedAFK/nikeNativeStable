@@ -1,21 +1,27 @@
+import { useRouter } from 'expo-router'
 import React from 'react'
-import { FlatList, Image, StyleSheet, View } from 'react-native'
+import { FlatList, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import products from '../data/products'
 
 const Products = () => {
+	const router = useRouter()
+
 	return (
 		<FlatList
 			data={products}
 			keyExtractor={item => item.id}
 			renderItem={({ item }) => (
-				<View style={styles.container}>
+				<TouchableOpacity
+					style={styles.container}
+					onPress={() => router.push(`product-details/${item.id}`)}
+				>
 					<Image
 						source={{
 							uri: item.image
 						}}
 						style={styles.image}
 					/>
-				</View>
+				</TouchableOpacity>
 			)}
 			numColumns={2}
 		/>
