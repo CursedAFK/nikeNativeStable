@@ -13,7 +13,7 @@ const Products = () => {
 			renderItem={({ item }) => (
 				<TouchableOpacity
 					style={styles.container}
-					onPress={() => router.push(`product-details/${item.id}`)}
+					onPress={() => router.push(`/product-details/${item.id}`)}
 				>
 					<Image
 						source={{
