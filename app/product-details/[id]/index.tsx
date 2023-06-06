@@ -1,4 +1,9 @@
-import { useLocalSearchParams, useNavigation, useRouter } from 'expo-router'
+import {
+	Stack,
+	useLocalSearchParams,
+	useNavigation,
+	useRouter
+} from 'expo-router'
 import React from 'react'
 import {
 	FlatList,
@@ -10,7 +15,6 @@ import {
 	View,
 	useWindowDimensions
 } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import products from '../../../data/products'
 
 const ProductDetails = () => {
@@ -25,35 +29,39 @@ const ProductDetails = () => {
 	const product = products.find(p => p.id === id)
 
 	return (
-		<SafeAreaView style={styles.container}>
-			<ScrollView>
-				<FlatList
-					data={product?.images}
-					renderItem={({ item }) => (
-						<Image source={{ uri: item }} style={{ width, aspectRatio: 1 }} />
-					)}
-					keyExtractor={item => item}
-					horizontal
-					showsHorizontalScrollIndicator={false}
-					pagingEnabled
-				/>
+		<>
+			<Stack.Screen options={{ title: product?.name }} />
 
-				<View style={styles.info}>
-					<Text style={styles.title}>{product?.name}</Text>
+			<View style={styles.container}>
+				<ScrollView>
+					<FlatList
+						data={product?.images}
+						renderItem={({ item }) => (
+							<Image source={{ uri: item }} style={{ width, aspectRatio: 1 }} />
+						)}
+						keyExtractor={item => item}
+						horizontal
+						showsHorizontalScrollIndicator={false}
+						pagingEnabled
+					/>
 
-					<Text style={styles.price}>$ {product?.price}</Text>
+					<View style={styles.info}>
+						<Text style={styles.title}>{product?.name}</Text>
 
-					<Text style={styles.description}>{product?.description}</Text>
-				</View>
-			</ScrollView>
+						<Text style={styles.price}>$ {product?.price}</Text>
 
-			<TouchableOpacity
-				style={styles.button}
-				onPress={() => router.push('shopping-cart')}
-			>
-				<Text style={styles.buttonText}>Add to cart</Text>
-			</TouchableOpacity>
-		</SafeAreaView>
+						<Text style={styles.description}>{product?.description}</Text>
+					</View>
+				</ScrollView>
+
+				<TouchableOpacity
+					style={styles.button}
+					onPress={() => router.push('shopping-cart')}
+				>
+					<Text style={styles.buttonText}>Add to cart</Text>
+				</TouchableOpacity>
+			</View>
+		</>
 	)
 }
 

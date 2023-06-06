@@ -1,12 +1,7 @@
-import { Slot } from 'expo-router'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { Stack } from 'expo-router'
 
 const RootLayout = () => {
-	return (
-		<SafeAreaProvider>
-			<Slot />
-		</SafeAreaProvider>
-	)
+	return <Stack screenOptions={{ headerTitleAlign: 'center' }} />
 }
 
 export default RootLayout

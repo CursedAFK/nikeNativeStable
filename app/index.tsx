@@ -1,13 +1,17 @@
+import { Stack } from 'expo-router'
 import React from 'react'
-import { StyleSheet } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { StyleSheet, View } from 'react-native'
 import Products from '../components/Products'
 
 const Home = () => {
 	return (
-		<SafeAreaView style={styles.container}>
-			<Products />
-		</SafeAreaView>
+		<>
+			<Stack.Screen options={{ title: 'Home' }} />
+
+			<View style={styles.container}>
+				<Products />
+			</View>
+		</>
 	)
 }
 
