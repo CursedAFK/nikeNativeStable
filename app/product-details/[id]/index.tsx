@@ -1,9 +1,4 @@
-import {
-	Stack,
-	useLocalSearchParams,
-	useNavigation,
-	useRouter
-} from 'expo-router'
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import React from 'react'
 import {
 	FlatList,
@@ -15,16 +10,18 @@ import {
 	View,
 	useWindowDimensions
 } from 'react-native'
-import products from '../../../data/products'
+import useNikeStore from '../../../contexts/store'
 
 const ProductDetails = () => {
 	const { width } = useWindowDimensions()
 
-	const navigation = useNavigation()
-
 	const router = useRouter()
 
 	const { id } = useLocalSearchParams()
+
+	const { products } = useNikeStore(store => ({
+		products: store.products
+	}))
 
 	const product = products.find(p => p.id === id)
 
@@ -54,10 +51,7 @@ const ProductDetails = () => {
 					</View>
 				</ScrollView>
 
-				<TouchableOpacity
-					style={styles.button}
-					onPress={() => router.push('shopping-cart')}
-				>
+				<TouchableOpacity style={styles.button} onPress={() => {}}>
 					<Text style={styles.buttonText}>Add to cart</Text>
 				</TouchableOpacity>
 			</View>

@@ -32,7 +32,7 @@ const ShoppingCartFooter = () => (
 const ShoppingCart = () => {
 	return (
 		<>
-			<Stack.Screen options={{ title: 'Shopping Cart' }} />
+			<Stack.Screen options={{ title: 'Cart' }} />
 
 			<View>
 				<FlatList

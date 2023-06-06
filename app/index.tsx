@@ -6,7 +6,7 @@ import Products from '../components/Products'
 const Home = () => {
 	return (
 		<>
-			<Stack.Screen options={{ title: 'Home' }} />
+			<Stack.Screen options={{ title: 'Products' }} />
 
 			<View style={styles.container}>
 				<Products />

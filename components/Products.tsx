@@ -1,10 +1,14 @@
 import { useRouter } from 'expo-router'
 import React from 'react'
 import { FlatList, Image, StyleSheet, TouchableOpacity } from 'react-native'
-import products from '../data/products'
+import useNikeStore from '../contexts/store'
 
 const Products = () => {
 	const router = useRouter()
+
+	const { products } = useNikeStore(store => ({
+		products: store.products
+	}))
 
 	return (
 		<FlatList
