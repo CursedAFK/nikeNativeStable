@@ -8,49 +8,85 @@ import {
 	View
 } from 'react-native'
 import CartListItem from '../../components/CartListItem'
-import cart from '../../data/cart'
+import useNikeStore from '../../contexts/store'
 
-const ShoppingCartFooter = () => (
-	<View style={styles.totalContainer}>
-		<View style={styles.row}>
-			<Text style={styles.text}>Subtotal</Text>
-			<Text style={styles.text}>410,00 US$</Text>
-		</View>
+const ShoppingCartFooter = () => {
+	const { cartItems, deliveryFee } = useNikeStore(store => ({
+		cartItems: store.cartItems,
+		deliveryFee: store.deliveryFee
+	}))
 
-		<View style={styles.row}>
-			<Text style={styles.text}>Delivery</Text>
-			<Text style={styles.text}>10,00 US$</Text>
-		</View>
+	return (
+		<View style={styles.totalContainer}>
+			<View style={styles.row}>
+				<Text style={styles.text}>Subtotal</Text>
+				<Text style={styles.text}>
+					{cartItems
+						.reduce((acc, item) => acc + item.price * item.quantity, 0)
+						.toLocaleString('en-US')}{' '}
+					US$
+				</Text>
+			</View>
 
-		<View style={styles.row}>
-			<Text style={styles.textBold}>Total</Text>
-			<Text style={styles.textBold}>420,00 US$</Text>
+			<View style={styles.row}>
+				<Text style={styles.text}>Delivery</Text>
+				<Text style={styles.text}>
+					{deliveryFee.toLocaleString('en-US')} US$
+				</Text>
+			</View>
+
+			<View style={styles.row}>
+				<Text style={styles.textBold}>Total</Text>
+				<Text style={styles.textBold}>
+					{(
+						cartItems.reduce(
+							(acc, item) => acc + item.price * item.quantity,
+							0
+						) + deliveryFee
+					).toLocaleString('en-US')}{' '}
+					US$
+				</Text>
+			</View>
 		</View>
-	</View>
-)
+	)
+}
 
 const ShoppingCart = () => {
+	const { cartItems } = useNikeStore(store => ({
+		cartItems: store.cartItems
+	}))
+
 	return (
 		<>
 			<Stack.Screen options={{ title: 'Cart' }} />
 
-			<View>
-				<FlatList
-					data={cart}
-					renderItem={({ item }) => <CartListItem cartItem={item} />}
-					keyExtractor={item => item.product.id}
-					ListFooterComponent={<ShoppingCartFooter />}
-				/>
+			<View style={cartItems.length === 0 && styles.container}>
+				{cartItems.length === 0 ? (
+					<Text style={styles.emptyCartText}>Your cart is empty</Text>
+				) : (
+					<>
+						<FlatList
+							data={cartItems}
+							renderItem={({ item }) => <CartListItem cartItem={item} />}
+							keyExtractor={item => item.id}
+							ListFooterComponent={<ShoppingCartFooter />}
+						/>
 
-				<TouchableOpacity style={styles.button} onPress={() => {}}>
-					<Text style={styles.buttonText}>Checkout</Text>
-				</TouchableOpacity>
+						<TouchableOpacity style={styles.button} onPress={() => {}}>
+							<Text style={styles.buttonText}>Checkout</Text>
+						</TouchableOpacity>
+					</>
+				)}
 			</View>
 		</>
 	)
 }
 
 const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		justifyContent: 'center'
+	},
 	totalContainer: {
 		margin: 20,
 		paddingTop: 10,
@@ -85,6 +121,13 @@ const styles = StyleSheet.create({
 		color: '#fff',
 		fontWeight: '500',
 		fontSize: 16
+	},
+	emptyCartText: {
+		textAlign: 'center',
+		fontWeight: '500',
+		fontSize: 22,
+		fontStyle: 'italic',
+		color: 'gray'
 	}
 })
 

@@ -1,44 +1,41 @@
 import { Feather } from '@expo/vector-icons'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import useNikeStore, { CartItem } from '../contexts/store'
 
 interface CartListItemProps {
-	cartItem: {
-		product: {
-			id: string
-			image: string
-			name: string
-			price: number
-		}
-		size: number
-		quantity: number
-	}
+	cartItem: CartItem
 }
 
 const CartListItem = ({ cartItem }: CartListItemProps) => {
-	const increaseQuantity = () => {}
-
-	const decreaseQuantity = () => {}
+	const { changeQuantity } = useNikeStore(store => ({
+		changeQuantity: store.changeQuantity
+	}))
 
 	return (
 		<View style={styles.container}>
-			<Image source={{ uri: cartItem.product.image }} style={styles.image} />
+			<Image source={{ uri: cartItem.image }} style={styles.image} />
 
 			<View style={styles.contentContainer}>
-				<Text style={styles.name}>{cartItem.product.name}</Text>
+				<Text style={styles.name}>{cartItem.name}</Text>
 
-				<Text style={styles.size}>Size {cartItem.size}</Text>
+				<Text style={styles.size}>
+					Size{' '}
+					{cartItem.sizes[Math.floor(Math.random() * cartItem.sizes.length)]}
+				</Text>
 
 				<View style={styles.footer}>
-					<TouchableOpacity onPress={decreaseQuantity}>
+					<TouchableOpacity onPress={() => changeQuantity(cartItem.id, -1)}>
 						<Feather name='minus-circle' size={24} color='gray' />
 					</TouchableOpacity>
 
 					<Text style={styles.quantity}>{cartItem.quantity}</Text>
 
-					<TouchableOpacity onPress={increaseQuantity}>
+					<TouchableOpacity onPress={() => changeQuantity(cartItem.id, 1)}>
 						<Feather name='plus-circle' size={24} color='gray' />
 					</TouchableOpacity>
-					<Text style={styles.itemTotal}>$320.0</Text>
+					<Text style={styles.itemTotal}>
+						${cartItem.price * cartItem.quantity}
+					</Text>
 				</View>
 			</View>
 		</View>

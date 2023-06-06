@@ -19,8 +19,9 @@ const ProductDetails = () => {
 
 	const { id } = useLocalSearchParams()
 
-	const { products } = useNikeStore(store => ({
-		products: store.products
+	const { products, addCartItem } = useNikeStore(store => ({
+		products: store.products,
+		addCartItem: store.addCartItem
 	}))
 
 	const product = products.find(p => p.id === id)
@@ -51,7 +52,10 @@ const ProductDetails = () => {
 					</View>
 				</ScrollView>
 
-				<TouchableOpacity style={styles.button} onPress={() => {}}>
+				<TouchableOpacity
+					style={styles.button}
+					onPress={() => product && addCartItem(product)}
+				>
 					<Text style={styles.buttonText}>Add to cart</Text>
 				</TouchableOpacity>
 			</View>

@@ -1,9 +1,12 @@
 import { FontAwesome } from '@expo/vector-icons'
 import { Stack, useRouter } from 'expo-router'
 import { StyleSheet, Text, TouchableOpacity } from 'react-native'
+import useNikeStore from '../contexts/store'
 
 const RootLayout = () => {
 	const router = useRouter()
+
+	const cartItems = useNikeStore(store => store.cartItems)
 
 	return (
 		<Stack
@@ -15,7 +18,9 @@ const RootLayout = () => {
 						onPress={() => router.push('shopping-cart')}
 					>
 						<FontAwesome name='shopping-cart' size={18} color='gray' />
-						<Text style={styles.cartText}>1</Text>
+						<Text style={styles.cartText}>
+							{cartItems.reduce((acc, item) => acc + item.quantity, 0)}
+						</Text>
 					</TouchableOpacity>
 				),
 				contentStyle: { backgroundColor: 'white' }
