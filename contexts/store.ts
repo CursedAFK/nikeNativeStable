@@ -1,3 +1,4 @@
+import { produce } from 'immer'
 import { create } from 'zustand'
 import products from '../data/products'
 
@@ -31,42 +32,35 @@ const useNikeStore = create<NikeStore>(set => ({
 	freeDeliveryFrom: 200,
 	cartItems: [],
 	addCartItem: (product: NikeProduct) =>
-		set(state => ({
-			...state,
-			cartItems: state.cartItems.find(item => item.id === product.id)
-				? state.cartItems.map(item =>
-						item.id === product.id
-							? { ...item, quantity: item.quantity + 1 }
-							: item
-				  )
-				: [...state.cartItems, { ...product, quantity: 1 }]
-		})),
+		set(
+			produce<NikeStore>(state => {
+				const cartItem = state.cartItems.find(item => item.id === product.id)
+				if (cartItem) {
+					cartItem.quantity += 1
+				} else {
+					state.cartItems.push({ ...product, quantity: 1 })
+				}
+			})
+		),
 	removeCartItem: (id: string) =>
-		set(state => ({
-			...state,
-			cartItems: state.cartItems.filter(item => item.id !== id)
-		})),
+		set(
+			produce<NikeStore>(state => {
+				state.cartItems = state.cartItems.filter(item => item.id !== id)
+			})
+		),
 	changeQuantity: (id: string, quantity: -1 | 1) =>
-		set(state => {
-			if (
-				quantity === -1 &&
-				state.cartItems.find(item => item.id === id)?.quantity === 1
-			) {
-				return {
-					...state,
-					cartItems: state.cartItems.filter(item => item.id !== id)
+		set(
+			produce<NikeStore>(state => {
+				const cartItem = state.cartItems.find(item => item.id === id)
+				if (cartItem) {
+					if (cartItem.quantity === 1 && quantity === -1) {
+						state.cartItems = state.cartItems.filter(item => item.id !== id)
+					} else {
+						cartItem.quantity += quantity
+					}
 				}
-			} else {
-				return {
-					...state,
-					cartItems: state.cartItems.map(item =>
-						item.id === id
-							? { ...item, quantity: item.quantity + quantity }
-							: item
-					)
-				}
-			}
-		})
+			})
+		)
 }))
 
 export default useNikeStore

@@ -34,7 +34,7 @@ const CartListItem = ({ cartItem }: CartListItemProps) => {
 						<Feather name='plus-circle' size={24} color='gray' />
 					</TouchableOpacity>
 					<Text style={styles.itemTotal}>
-						${cartItem.price * cartItem.quantity}
+						${(cartItem.price * cartItem.quantity).toLocaleString('en-US')}
 					</Text>
 				</View>
 			</View>

@@ -11,39 +11,43 @@ import CartListItem from '../../components/CartListItem'
 import useNikeStore from '../../contexts/store'
 
 const ShoppingCartFooter = () => {
-	const { cartItems, deliveryFee } = useNikeStore(store => ({
+	const { cartItems, deliveryFee, freeDeliveryFrom } = useNikeStore(store => ({
 		cartItems: store.cartItems,
-		deliveryFee: store.deliveryFee
+		deliveryFee: store.deliveryFee,
+		freeDeliveryFrom: store.freeDeliveryFrom
 	}))
+
+	const totalCartItems = cartItems.reduce(
+		(acc, item) => acc + item.price * item.quantity,
+		0
+	)
+
+	const isFreeDelivery = totalCartItems >= freeDeliveryFrom
 
 	return (
 		<View style={styles.totalContainer}>
 			<View style={styles.row}>
 				<Text style={styles.text}>Subtotal</Text>
 				<Text style={styles.text}>
-					{cartItems
-						.reduce((acc, item) => acc + item.price * item.quantity, 0)
-						.toLocaleString('en-US')}{' '}
-					US$
+					{totalCartItems.toLocaleString('en-US')} US$
 				</Text>
 			</View>
 
 			<View style={styles.row}>
 				<Text style={styles.text}>Delivery</Text>
 				<Text style={styles.text}>
-					{deliveryFee.toLocaleString('en-US')} US$
+					{isFreeDelivery
+						? 'Free'
+						: `${deliveryFee.toLocaleString('en-US')} US$`}
 				</Text>
 			</View>
 
 			<View style={styles.row}>
 				<Text style={styles.textBold}>Total</Text>
 				<Text style={styles.textBold}>
-					{(
-						cartItems.reduce(
-							(acc, item) => acc + item.price * item.quantity,
-							0
-						) + deliveryFee
-					).toLocaleString('en-US')}{' '}
+					{isFreeDelivery
+						? totalCartItems.toLocaleString('en-US')
+						: (totalCartItems + deliveryFee).toLocaleString('en-US')}{' '}
 					US$
 				</Text>
 			</View>
@@ -60,7 +64,11 @@ const ShoppingCart = () => {
 		<>
 			<Stack.Screen options={{ title: 'Cart' }} />
 
-			<View style={cartItems.length === 0 && styles.container}>
+			<View
+				style={
+					cartItems.length === 0 ? styles.containerEmpty : styles.container
+				}
+			>
 				{cartItems.length === 0 ? (
 					<Text style={styles.emptyCartText}>Your cart is empty</Text>
 				) : (
@@ -84,6 +92,9 @@ const ShoppingCart = () => {
 
 const styles = StyleSheet.create({
 	container: {
+		flex: 1
+	},
+	containerEmpty: {
 		flex: 1,
 		justifyContent: 'center'
 	},
